@@ -35,7 +35,7 @@ app.get('/jokes', async (req, res, next) => {
   }
 });
 
-// POST
+
 app.post("/jokes", async (req, res, next) => {
   try {
     const { joke, tags } = req.body;
@@ -47,8 +47,21 @@ app.post("/jokes", async (req, res, next) => {
   }
 })
 
+app.put("/jokes/:id", async (req, res, next) => {
+  try {
+    const { joke, tags } = req.body;
+    
+    const updatedJoke = await Joke.update({ joke: joke, tags: tags }, { 
+      where: { id: req.params.id }
+    });
 
-// DELETE
+    res.status(200).send(updatedJoke);
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
+})
+
 app.delete("/jokes/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
